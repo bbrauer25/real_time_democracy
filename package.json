@@ -1,0 +1,18 @@
+{
+  "name": "richardson_monroe_bank",
+  "version": "1.0.0",
+  "description": "cs 361 final project",
+  "main": "db_connection.js",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "express-handlebars": "^2.0.1",
+    "mysql": "^2.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Monroe",
+  "license": "ISC"
+}

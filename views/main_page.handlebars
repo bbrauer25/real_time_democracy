@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+</head>
+<body>
+<h1 id="heading">Richardson-Monroe Bank & Trust<span style="float:right">Logged in as: {{loggedInUser}}</span></h1>
+<table>
+    <div id="directions"><p><strong>Directions:<br></strong>
+        On this page you should not a couple of things. You must be logged in for any of the forms to work. You can tell
+        if you are logged in by looking at the top right corner of the page and finding your username. Once you are
+        logged in you can use the rest of the page. We have established some vendors to make payments to available in
+        the "Make a Payment" form. Below that there are some controls to access your account(s) and transaction(s).
+        Below that there is a way for you to view the back end (database) of this website if you want. Also in this section
+		is the calculate interest option. When you click this is calcualtes the interest on all of the available accounts.
+        The rest of the form works like you would expect a normal banking website to work.
+    </p>
+    </div>
+    <div id="loginForm">
+        <tr>
+            <td>
+                <legend>Login Here</legend>
+                <form>
+                    <p>
+                    <table>
+                        <tr>
+                            <td><input type="text" name="usernameLogins" id="usernameLogin" required="true"
+                                       placeholder="Username">
+                                <input type="password" name="passwordLogins" id="passwordLogin" placeholder="Password">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="submit" value="Login" id="loginSubmit">
+                            </td>
+                        </tr>
+                    </table>
+                    </p>
+
+                </form>
+                <legend>Logout Here</legend>
+                <form><input type="text" name="usernameLogout" id="usernameLogout" required="true"
+                             value="logout" hidden="true"> <input type="submit" value="Logout" id="logoutSubmit"
+                                                                  onclick="logout()"></form>
+    </div>
+    </td>
+    <td>
+        <div id="createUserForm">
+            <legend>Create a user here</legend>
+            <form>
+                <p>
+                <table>
+                    <tr>
+                        <td><input type="text" name="fname" id="firstName" required="true" placeholder="First Name">
+                            <input type="text" name="mname" id="middleName" placeholder="Middle Name (Optional)">
+                            <input type="text" name="lname" id="lastName" required="true" placeholder="Last Name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="ename" id="email" required="true" placeholder="e-mail"
+                                   class="evenRow">
+                            <input type="text" name="uname" id="username" required="true" placeholder="Username"
+                                   class="evenRow">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" name="password1" id="pw1" required="true" placeholder="Password"
+                                   class="evenRow">
+                            <input type="password" name="password2" id="pw2" required="true"
+                                   placeholder="Verify Password"
+                                   class="evenRow">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" id="createUserSubmit">
+                        </td>
+                    </tr>
+                </table>
+                </p>
+            </form>
+        </div>
+    </td>
+    </tr>
+    <tr>
+        <td>
+            <div id="openAnAccount">
+                <legend>Open an Account</legend>
+                <form>
+                    <p>
+                    <h4>Which type of account would you like to open?</h4>
+                    Keep in mind you can only have 1 account of each type.<br>
+                    <input type="radio" name="accountType" id="Checking" value="Checking">Checking<br>
+                    <input type="radio" name="accountType" id="Savings" value="Savings">Savings<br>
+                    <input type="radio" name="accountType" id="Brokerage Account" value="Brokerage">Brokerage
+                    Account<br>
+                    </p>
+                    <input type="submit" id="openAnAccountSubmit">
+                </form>
+            </div>
+        </td>
+        <td>
+            <div id="closeAnAccount">
+                <legend>Close an Account</legend>
+                <form>
+                    <p>
+                    <h4>Which type of account would you like to close?</h4>
+                    <input type="radio" name="closeAccountType" id="dChecking" value="Checking">Checking<br>
+                    <input type="radio" name="closeAccountType" id="dSavings" value="Savings">Savings<br>
+                    <input type="radio" name="closeAccountType" id="dBrokerage Account" value="Brokerage">Brokerage
+                    Account<br>
+
+                    </p>
+                    <input type="submit" id="closeAnAccountSubmit">
+                </form>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div id="makeADeposit">
+                <legend>Make a Deposit</legend>
+                <form>
+                    <p>
+                    <h4>Please select an account and enter the dollar amount you would like to deposit</h4>
+                    <select name="dep_account_type">
+                        <option value="" disabled selected>Please select...</option>
+                        <option value="Checking">Checking</option>
+                        <option value="Savings">Savings</option>
+                        <option value="Brokerage">Brokerage</option>
+                    </select>
+                    <input type="number" step="0.01" name="depositAmt" id="depositAmt" value="depositAmt"
+                           required="true"
+                           placeholder="Deposit Amount">
+                    <input type="submit" id="submitDepositAmt">
+                    </p>
+                </form>
+            </div>
+        </td>
+        <td>
+            <div id="makeAWithdrawl">
+                <legend>Make a Withdrawl</legend>
+                <form>
+                    <p>
+                    <h4>Please select an account and enter the dollar amount you would like to withdraw:</h4>
+                    <select name="with_account_type">
+                        <option value="" disabled selected>Please select...</option>
+                        <option value="Checking">Checking</option>
+                        <option value="Savings">Savings</option>
+                        <option value="Brokerage">Brokerage</option>
+                    </select>
+                    <input type="number" step="0.01" name="withdrawlAmt" id="withdrawlAmt" value="withdrawlAmt"
+                           required="true"
+                           placeholder="Withdrawl Amount">
+                    <input type="submit" id="submitWithdrawlAmt">
+                    </p>
+                </form>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div id="makeAPayment">
+                <legend>Make a Payment</legend>
+                <form>
+                    <p>
+                    <h4>Please select a payee and an account to pay from:</h4>
+                    <table>
+                        <tr>
+                            <th>Make a Payment to:</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="payment_to">
+                                    <option value="" disabled selected>Please select...</option>
+                                    <option value="jack_daniels">Jack Daniels</option>
+                                    <option value="sierra_nevada">Sierra Nevada</option>
+                                    <option value="quicken_loans">Quicken Loans</option>
+                                    <option value="xcel_energy">Xcel Energy</option>
+                                    <option value="chase_bank">Chase Bank</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    </br>
+                    <table>
+                        <tr>
+                            <th>Make a Payment from:</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="payment_from">
+                                    <option value="" disabled selected>Please select...</option>
+                                    <option value="Checking">Checking</option>
+                                    <option value="Savings">Savings</option>
+                                    <option value="Brokerage">Brokerage</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    </br>
+                    <table>
+                        <tr>
+                            <td><input type="number" step="0.01" name="paymentAmt" id="paymentAmt" required="true"
+                                       placeholder="Payment Amount"></td>
+                            <td><input type="submit" id="paymentSubmit"></td>
+                        </tr>
+                    </table>
+                    </p>
+                </form>
+            </div>
+        </td>
+        <td>
+            <div id="makeATransfer">
+                <legend>Transfer Money</legend>
+                <form>
+                    <p>
+                    <h4>Please select an account to transfer to and from:</h4>
+                    <table>
+                        <tr>
+                            <th>Transfer Money to:</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="transfer_to">
+                                    <option value="" disabled selected>Please select...</option>
+                                    <option value="Checking">Checking</option>
+                                    <option value="Savings">Savings</option>
+                                    <option value="Brokerage">Brokerage</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    </br>
+                    <table>
+                        <tr>
+                            <th>Transfer Money from:</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="transfer_from">
+                                    <option value="" disabled selected>Please select...</option>
+                                    <option value="Checking">Checking</option>
+                                    <option value="Savings">Savings</option>
+                                    <option value="Brokerage">Brokerage</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    </br>
+                    <table>
+                        <tr>
+                            <td><input type="number" step="0.01" name="transferAmt" id="transferAmt" required="true"
+                                       placeholder="Transfer Amount"></td>
+                            <td><input type="submit" id="transferSubmit"></td>
+                        </tr>
+                    </table>
+                    </p>
+                </form>
+            </div>
+        </td>
+    </tr>
+    <div>
+        <tr>
+            <td>
+                <legend>View Info About Your Accounts</legend>
+                <form><p>Select below</p>
+                    <select name="custView">
+                        <option value="" disabled selected>Please select...</option>
+                        <option value="viewAccounts">View Your Accounts</option>
+                        <option value="viewTransactions">View Your Transactions</option>
+                    </select>
+                    <input type="submit" id="submitAccountSum">
+
+                    </p></form>
+            </td>
+
+            <td><legend>View Info About the Backend</legend>
+                <form><p>Select below</p>
+                    <select name="teacherView">
+                        <option value="" disabled selected>Please select...</option>
+                        <option value="viewBIAccounts">View Accounts</option>
+                        <option value="viewBITransactions">View Transactions</option>
+                        <option value="viewBIPasswords">View Passwords</option>
+                        <option value="viewBIUsers">View Users</option>
+                        <option value="viewBIAccountTypes">View Account Types</option>
+						<option value="viewBITransactionTypes">View Trans Types</option>
+                        <option value="calcInterest">Calculate Interest</option>
+                    </select>
+                    <input type="submit" id="submitTeacherQueries">
+                    </p></form>
+            </td>
+        </tr>
+    </div>
+</table>
+</body>
+</html>
