@@ -1,0 +1,165 @@
+/* Reset */
+*{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+/* Global styles */
+html {
+  height: 100%;
+}
+body {
+	height: 100%;
+	background-color: #dedede;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #252525;
+}
+
+h1, h2, h3,
+h4, h5, h6{
+	font-weight: bold;
+	color: #c62828;
+	margin: 15px 0;
+}
+
+h1{
+	font-size: 36px;
+}
+
+h3{
+	font-size: 28px;
+}
+
+h5{
+	font-size: 18px;
+	color: #252525;
+}
+
+strong{
+	font-weight: bold;
+}
+
+.hidden{
+	display: none;
+}
+
+.red{
+	background-color: #c62828;
+}
+
+.blue{
+	background-color: #1565c0;
+}
+
+.green{
+	background-color: #252525;
+}
+
+#main{
+	position: relative;
+	min-height: 100%;
+	width: 960px;
+	margin: auto;
+	padding-bottom: 40px;
+	background-color: #fff;
+}
+
+#main section{
+	padding: 20px;
+}
+
+/* Header */
+#header{
+	padding: 10px;
+	background-color: #1565c0;
+	text-align: right;
+}
+
+#header a{
+	float: left;
+	text-decoration: none;
+	color: #fff;
+	font-size: 18px;
+	line-height: 28px;
+	font-weight: bold;
+}
+
+#header form input{
+	padding: 5px;
+	border-radius: 3px;
+}
+
+#header #form-submit{
+	background-color: #c62828;
+	padding: 5px 10px;
+	color: #fff;
+}
+
+/* Profile */
+#profile .profile-image{
+	display: inline-block;
+	width: 200px;
+	margin-right: 20px;
+}
+
+#profile .profile-info{
+	display: inline-block;
+	width: 680px;
+	vertical-align: top;
+}
+
+#profile .profile-info p{
+	margin-bottom: 10px;
+}
+
+#profile ul{
+	margin-left: 20px;
+}
+
+#profile ul li{
+	list-style-type: circle;
+}
+
+/* Footer */
+
+#footer{
+	position: absolute;
+	bottom: 0;
+	width: 960px;
+	padding: 10px 0;
+	background-color: #1565c0;
+	text-align: center;
+	color: #fff;
+}
+
+/* Polls */
+.poll{
+	width: 600px;
+}
+
+.poll .result{
+	display: inline-block;
+	height: 40px;
+	margin: 10px 0;
+	font-size: 14px;
+	line-height: 40px;
+	color: #fff;
+	text-align: center;
+}
+
+.poll .poll-label{
+	display: inline-block;
+}
+
+.result.green{
+	background-color: green;
+}
