@@ -23,24 +23,10 @@ app.use(express.static('static')); //static pages for testing
 
 //sends to home page if user not logged in
 //else sends to home page - home_page.handlebars
-app.get('/sign-up', function (req, res, next) {
-    res.render('sign_up');
-    //res.sendFile('static/signup.html', { root : __dirname});   
+app.get('/profile', function (req, res, next) {
+    res.render('profile');
+    //res.sendFile('static/profile.html', { root : __dirname});   
 }); 
-
-app.post('/sign-up', function (req, res, next){
-    console.log(req.body.fname);
-   var signupQuery = "INSERT INTO RTD_user (f_name, l_name, email, zip, role_type_id) VALUES (\"" + req.body.fname + "\,\"" + req.body.lname + "\, \""  + req.body.email + "\, \""  + req.body.zip + "\, (SELECT id FROM RTD_role_type WHERE role_name = \""  + "constituent" + "\))";
-    mysql.pool.query(signupQuery, function (err, rows) {
-        if (err) return;
-        
-            if (rows < 1) {
-                req.session.reset();
-                res.send('Sorry, sign up failed');
-            } 
-    });
-    res.render('signup_complete');
-});
 
 app.use(function (req, res) {
     res.status(404);
