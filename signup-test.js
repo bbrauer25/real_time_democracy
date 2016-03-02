@@ -20,11 +20,27 @@ app.use(express.static('static')); //static pages for testing
   activeDuration: 5 * 60 * 1000
 })); 
 
-// this is just a basic set up of the profile page, no data from the DB is connected
-// I am not sure where the bio, user since, etc data is in the DB
-app.get('/profile', function (req, res, next) {
-    res.render('profile');
-    //res.sendFile('static/profile.html', { root : __dirname});   
+// test will run when Test button is hit
+app.get('/signup-test', function (req, res, next) {
+    res.render('signup_test');
+});
+
+// this is not working, there is a error "Can't set headers after they are sent"
+// 
+app.post('/signup-test', function (req, res, next) {
+    // select everything to see if data is submiting/entering
+    var testQuery = "SELECT * FROM RTD_user;";
+            mysql.pool.query(testQuery, function (err, rows) {
+            if (err) {
+              next(err);
+              return;
+            }
+            if (rows.length > 0) {
+              console.log(rows[2]);
+              res.render('signup_test_results');
+            } 
+          });
+   res.render('signup_test_results')
 }); 
 
 app.use(function (req, res) {
