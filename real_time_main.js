@@ -31,7 +31,22 @@ app.get('/', function (req, res, next) {
         next(err);
         return;
       }
+      var issueArray = [];
       if (rows.length > 0) {
+        console.log(rows[0]);
+        var data = {
+          username: req.session.username,
+          issue_description: rows[0].issue,
+          issue_title: rows[0].title
+        };
+        for (var i = 0; i < rows.length; i++) {
+          issueArray.push("<h1>" + rows[i].title + "</h1><p>" + rows[i].issue + "</p>");
+        };
+        data.issue = issueArray;
+        res.render('home_page', data);
+      }
+  
+      /*if (rows.length > 0) {
         console.log(rows[0]);
         var data = {
           username: req.session.username,
@@ -42,7 +57,7 @@ app.get('/', function (req, res, next) {
       } else {
           var data = {username: req.session.username};
           res.render('home_page', data)
-      }
+      }*/
     });
   } else {  //serve home.html if not
     res.sendFile('static/home.html', { root : __dirname});
@@ -89,12 +104,20 @@ app.post('/login', function (req, res, next) {
             }
             if (rows.length > 0) {
               console.log(rows[0]);
-              var data = {
-                username: req.session.username,
-                issue_description: rows[0].issue,
-                issue_title: rows[0].title
-              };
-              res.render('home_page', data);
+              var issueArray = [];
+              if (rows.length > 0) {
+                console.log(rows[0]);
+                var data = {
+                  username: req.session.username,
+                  issue_description: rows[0].issue,
+                  issue_title: rows[0].title
+                };
+                for (var i = 0; i < rows.length; i++) {
+                  issueArray.push("<h1>" + rows[i].title + "</h1><p>" + rows[i].issue + "</p>");
+                };
+                data.issue = issueArray;
+                res.render('home_page', data);
+              }
             } else {
                 var data = {username: req.session.username};
                 res.render('home_page', data)

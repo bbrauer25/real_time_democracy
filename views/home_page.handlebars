@@ -24,11 +24,17 @@
     <p>
       User: {{username}}
     </p>
+    
     <h1>My First Issue</h1>
     <h2>Title: {{issue_title}}</h2>
     <p>
       {{issue_description}}
     </p>
+    
+    {{#each issue}}
+      {{{this}}}
+    {{/each}}
+
   
 </body>
 </html>
