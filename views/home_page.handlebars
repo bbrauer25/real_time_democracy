@@ -41,20 +41,10 @@
 				<p>
 					{{issue_description}}
 				</p>
-			</article>
-
-			<article class="issue">
-				<h3>{{issue_title}}</h3>
-				<p>
-					{{issue_description}}
-				</p>
-			</article>
-
-			<article class="issue">
-				<h3>{{issue_title}}</h3>
-				<p>
-					{{issue_description}}
-				</p>
+        <form action="/viewDetail" method="post">
+          <input id="form-submit" type="submit" value="View Issue Detail">
+            <input id="issue_id" name="issue_id" type="hidden" value={{issue_id}}>
+          </form>
 			</article>
 
 		</section>

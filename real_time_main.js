@@ -25,7 +25,7 @@ app.use(sessions({
 app.get('/', function (req, res, next) {
   //screen for whether user is logged in
   if (req.session && req.session.username) { //user based home landing page
-    var issueQuery = "SELECT title, issue FROM RTD_issue;";
+    var issueQuery = "SELECT title, id, issue FROM RTD_issue;";
     mysql.pool.query(issueQuery, function (err, rows) {
       if (err) {
         next(err);
@@ -37,7 +37,8 @@ app.get('/', function (req, res, next) {
         var data = {
           username: req.session.username,
           issue_description: rows[0].issue,
-          issue_title: rows[0].title
+          issue_title: rows[0].title,
+          issue_id: rows[0].id
         };
         for (var i = 0; i < rows.length; i++) {
           issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
@@ -62,6 +63,19 @@ app.get('/', function (req, res, next) {
   } else {  //serve home.html if not
     res.sendFile('static/home.html', { root : __dirname});
   }
+});
+
+app.post('/viewDetail', function(req, res) {
+  var viewDetailQuery = "SELECT id, title, issue FROM RTD_issue WHERE id =" + req.body.issue_id + ";";
+  console.log(viewDetailQuery);
+  mysql.pool.query(viewDetailQuery, function (err, rows) {
+    if (err) return;
+    if (rows < 1) {
+      res.send("no issue found in database");
+    } else {
+      res.send("issue_id: " + rows[0].id + " , issue_title: " + rows[0].title + " , issue_description: " + rows[0].issue);
+    }
+  });
 });
 
 app.post('/logout', function(req, res) {
@@ -96,7 +110,7 @@ app.post('/login', function (req, res, next) {
             req.session.reset();
           }
           req.session.username = req.body.username;
-          var issueQuery = "SELECT title, issue FROM RTD_issue;";
+          var issueQuery = "SELECT title, id, issue FROM RTD_issue;";
           mysql.pool.query(issueQuery, function (err, rows) {
             if (err) {
               next(err);
@@ -110,10 +124,11 @@ app.post('/login', function (req, res, next) {
                 var data = {
                   username: req.session.username,
                   issue_description: rows[0].issue,
-                  issue_title: rows[0].title
+                  issue_title: rows[0].title,
+                  issue_id: rows[0].id
                 };
                 for (var i = 0; i < rows.length; i++) {
-                  issueArray.push("<h1>" + rows[i].title + "</h1><p>" + rows[i].issue + "</p>");
+                  issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
                 };
                 data.issue = issueArray;
                 res.render('home_page', data);
