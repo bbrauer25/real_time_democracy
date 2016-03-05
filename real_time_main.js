@@ -11,7 +11,7 @@ app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 //app.set('views', __dirname + '/views');
 //app.set('view engine', 'jade');
-app.set('port', 3000);
+app.set('port', 3001);
 app.use(express.static('static')); //static pages for testing
 app.use(sessions({
   cookieName: 'session',
@@ -40,7 +40,7 @@ app.get('/', function (req, res, next) {
           issue_title: rows[0].title
         };
         for (var i = 0; i < rows.length; i++) {
-          issueArray.push("<h1>" + rows[i].title + "</h1><p>" + rows[i].issue + "</p>");
+          issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
         };
         data.issue = issueArray;
         res.render('home_page', data);
