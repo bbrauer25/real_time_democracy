@@ -11,7 +11,7 @@ app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 //app.set('views', __dirname + '/views');
 //app.set('view engine', 'jade');
-app.set('port', 3000);
+app.set('port', 3001);
 app.use(express.static('static')); //static pages for testing
  app.use(sessions({
   cookieName: 'session',
@@ -25,8 +25,6 @@ app.get('/signup-test', function (req, res, next) {
     res.render('signup_test');
 });
 
-// this is not working, there is a error "Can't set headers after they are sent"
-// 
 app.post('/signup-test', function (req, res, next) {
     // select everything to see if data is submiting/entering
     var testQuery = "SELECT * FROM RTD_user;";
@@ -36,11 +34,12 @@ app.post('/signup-test', function (req, res, next) {
               return;
             }
             if (rows.length > 0) {
-              console.log(rows[2]);
+              console.log(rows[rows.length - 1]);
               res.render('signup_test_results');
-            } 
+            }
+		else 
+		 res.render('signup_test_results')
           });
-   res.render('signup_test_results')
 }); 
 
 app.use(function (req, res) {
