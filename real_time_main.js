@@ -57,8 +57,21 @@ app.get('/', function (req, res, next) {
 });
 
 app.post('/viewDetail', function(req, res) {
+  //expects issue_id to be posted as a body parameter
   var viewDetailQuery = "SELECT id, title, issue FROM RTD_issue WHERE id =" + req.body.issue_id + ";";
   console.log(viewDetailQuery);
+  
+  //screen to see if comment_text is set and add to database if sort
+  if (req.body.comment_text) {
+    var commentInsertQuery = "INSERT INTO RTD_issue_comment(user_id, issue_id, comment) VALUES(";
+    commentInsertQuery += req.session.user_id + "," + req.body.issue_id + ",\"" + req.body.comment_text + "\");";
+    console.log(commentInsertQuery);
+    mysql.pool.query(commentInsertQuery, function (err, results) {
+      if (err) return;
+      console.log("successfully added comment");
+    });
+  }
+  
   mysql.pool.query(viewDetailQuery, function (err, rows) {
     if (err) return;
     if (rows < 1) {
@@ -70,27 +83,28 @@ app.post('/viewDetail', function(req, res) {
         issue_description: rows[0].issue,
         issue_upvotes: 0,
         issue_id: req.body.issue_id,
-        comments: ["<p>something cool</p>", "<p>this is awesome</p>", "<p>boohoo</p>"]
+        comments: []
       };
-      //get comments
-      commentsQuery = "SELECT comment FROM RTD_issue_comment WHERE issue_id = " + req.body.issue_id + ";";
-      console.log(commentsQuery);
-      mysql.pool.query(commentsQuery, function (err, rows) {
-        if (err) return;
-        if (rows.length > 0) {
-          for (var i = 0; i < rows.length; i++) {
-            var myComment = "<p>" + rows[i].comment + "</p>";
-            commentsArray.push(myComment);
+      currentUpvotesQuery = "SELECT * FROM RTD_issue_upvote WHERE issue_id = " + req.body.issue_id + ";";
+      mysql.pool.query(currentUpvotesQuery, function (err, rows) {
+        data.issue_upvotes = rows.length;
+        //get comments 
+        commentsQuery = "SELECT comment FROM RTD_issue_comment WHERE issue_id = " + req.body.issue_id + ";";
+        console.log(commentsQuery);
+        mysql.pool.query(commentsQuery, function (err, rows) {
+          if (err) return;
+          if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+              var myComment = "<p>" + rows[i].comment + "</p>";
+              commentsArray.push(myComment);
+            }
+            data.comments = commentsArray;
+            res.render('viewDetail', data);
+          } else {
+            res.render('viewDetail', data);
           }
-          data.comments = commentsArray;
-          res.render('viewDetail', data);
-        } else {
-          res.render('viewDetail', data);
-        }
+        });
       });
-      
-      //res.render('viewDetail', data);
-      //res.send("issue_id: " + rows[0].id + " , issue_title: " + rows[0].title + " , issue_description: " + rows[0].issue);
     }
   });
 });
