@@ -41,24 +41,15 @@ app.get('/', function (req, res, next) {
           issue_id: rows[0].id
         };
         for (var i = 0; i < rows.length; i++) {
-          issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
+          //issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
+          var myArticle = "<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p>";
+          myArticle += "<form action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\">";
+          myArticle += "<input class=\"issue\" name=\"issue_id\" type=\"hidden\" value=" + rows[i].id + "></form></article>";
+          issueArray.push(myArticle);
         };
         data.issue = issueArray;
         res.render('home_page', data);
       }
-  
-      /*if (rows.length > 0) {
-        console.log(rows[0]);
-        var data = {
-          username: req.session.username,
-          issue_description: rows[0].issue,
-          issue_title: rows[0].title
-        };
-        res.render('home_page', data);
-      } else {
-          var data = {username: req.session.username};
-          res.render('home_page', data)
-      }*/
     });
   } else {  //serve home.html if not
     res.sendFile('static/home.html', { root : __dirname});
@@ -66,15 +57,70 @@ app.get('/', function (req, res, next) {
 });
 
 app.post('/viewDetail', function(req, res) {
+  //expects issue_id to be posted as a body parameter
   var viewDetailQuery = "SELECT id, title, issue FROM RTD_issue WHERE id =" + req.body.issue_id + ";";
   console.log(viewDetailQuery);
+  
+  //screen to see if comment_text is set and add to database if sort
+  if (req.body.comment_text) {
+    var commentInsertQuery = "INSERT INTO RTD_issue_comment(user_id, issue_id, comment) VALUES(";
+    commentInsertQuery += req.session.user_id + "," + req.body.issue_id + ",\"" + req.body.comment_text + "\");";
+    console.log(commentInsertQuery);
+    mysql.pool.query(commentInsertQuery, function (err, results) {
+      if (err) return;
+      console.log("successfully added comment");
+    });
+  }
+  
   mysql.pool.query(viewDetailQuery, function (err, rows) {
     if (err) return;
     if (rows < 1) {
       res.send("no issue found in database");
     } else {
-      res.send("issue_id: " + rows[0].id + " , issue_title: " + rows[0].title + " , issue_description: " + rows[0].issue);
+      var commentsArray = [];
+      var data = {
+        issue_title: rows[0].title,
+        issue_description: rows[0].issue,
+        issue_upvotes: 0,
+        issue_id: req.body.issue_id,
+        comments: []
+      };
+      currentUpvotesQuery = "SELECT * FROM RTD_issue_upvote WHERE issue_id = " + req.body.issue_id + ";";
+      mysql.pool.query(currentUpvotesQuery, function (err, rows) {
+        data.issue_upvotes = rows.length;
+        //get comments 
+        commentsQuery = "SELECT comment FROM RTD_issue_comment WHERE issue_id = " + req.body.issue_id + ";";
+        console.log(commentsQuery);
+        mysql.pool.query(commentsQuery, function (err, rows) {
+          if (err) return;
+          if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+              var myComment = "<p>" + rows[i].comment + "</p>";
+              commentsArray.push(myComment);
+            }
+            data.comments = commentsArray;
+            res.render('viewDetail', data);
+          } else {
+            res.render('viewDetail', data);
+          }
+        });
+      });
     }
+  });
+});
+
+app.post('/sendUpvote', function(req, res) {
+  var userID = req.session.user_id;
+  //first send the vote
+  var sendUpvoteQuery = "INSERT INTO RTD_issue_upvote(user_id, issue_id, upvote) VALUES(";
+  sendUpvoteQuery += userID + "," + req.body.issue_id + ",\"1\");";
+  mysql.pool.query(sendUpvoteQuery, function (err, result) {
+    if (err) return;
+    currentUpvotesQuery = "SELECT * FROM RTD_issue_upvote WHERE issue_id = " + req.body.issue_id + ";";
+    mysql.pool.query(currentUpvotesQuery, function (err, rows) {
+      if (err) return;
+      res.send("Upvotes: " + rows.length);
+    });
   });
 });
 
@@ -97,6 +143,7 @@ app.post('/login', function (req, res, next) {
       res.send('Sorry, credentials are invalid');
     } else {
       //now check for password
+      var userID = rows[0].id;
       var passwordQuery = "SELECT id FROM RTD_password WHERE user_id = " + rows[0].id;
       passwordQuery += " AND password = \"" + req.body.password + "\";";
       mysql.pool.query(passwordQuery, function (err, rows) {
@@ -110,6 +157,7 @@ app.post('/login', function (req, res, next) {
             req.session.reset();
           }
           req.session.username = req.body.username;
+          req.session.user_id = userID;
           var issueQuery = "SELECT title, id, issue FROM RTD_issue;";
           mysql.pool.query(issueQuery, function (err, rows) {
             if (err) {
@@ -128,7 +176,11 @@ app.post('/login', function (req, res, next) {
                   issue_id: rows[0].id
                 };
                 for (var i = 0; i < rows.length; i++) {
-                  issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
+                  var myArticle = "<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p>";
+                  myArticle += "<form action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\">";
+                  myArticle += "<input class=\"issue\" name=\"issue_id\" type=\"hidden\" value=" + rows[i].id + "></form></article>";
+                  //issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
+                  issueArray.push(myArticle);
                 };
                 data.issue = issueArray;
                 res.render('home_page', data);

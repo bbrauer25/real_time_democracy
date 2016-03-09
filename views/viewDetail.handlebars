@@ -9,9 +9,13 @@
 	<meta name="author" content="CS361 ">
 
 	<link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="viewDetail.js"></script>
+
 
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+
 	<![endif]-->
 </head>
 
@@ -27,10 +31,22 @@
 		</header>
 
 		<section>
-
-			<h1>Welcome, {{username}}!</h1>
       
-      {{#each issue}}
+      <h1>{{issue_title}}</h1>
+      <p>{{issue_description}}</p>
+      <p id="upvotes_value">Upvotes: {{issue_upvotes}}</p>
+      
+      <img id="upvote_image" src="images/vote.jpg" alt="vote button">
+      
+      <form action="/viewDetail" method="post">
+        <textarea name="comment_text" placeholder="comment here"></textarea>
+        <input id="form-submit" type="submit" value="Add Comment">
+        <input id="issue_id" name="issue_id" type="hidden" value={{issue_id}}>
+      </form>
+      
+      <!-- display latest 5 comments -->
+      <!-- needs styling -->
+      {{#each comments}}
         {{{this}}}
       {{/each}}
 
