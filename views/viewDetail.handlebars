@@ -23,7 +23,7 @@
 	<section id="main">
 
 		<header id="header">
-			<a>Real Time Democracy</a>
+			<a href="home.html">Real Time Democracy</a>
 			<form action="/logout" method="post">
 				<input id="form-submit" type="submit" value="Logout">
 			</form>
@@ -31,24 +31,32 @@
 		</header>
 
 		<section>
-      
-      <h1>{{issue_title}}</h1>
-      <p>{{issue_description}}</p>
-      <p id="upvotes_value">Upvotes: {{issue_upvotes}}</p>
-      
-      <img id="upvote_image" src="images/vote.jpg" alt="vote button">
-      
-      <form action="/viewDetail" method="post">
-        <textarea name="comment_text" placeholder="comment here"></textarea>
-        <input id="form-submit" type="submit" value="Add Comment">
-        <input id="issue_id" name="issue_id" type="hidden" value={{issue_id}}>
-      </form>
-      
-      <!-- display latest 5 comments -->
-      <!-- needs styling -->
-      {{#each comments}}
-        {{{this}}}
-      {{/each}}
+
+			<article class="issue-info">
+				<h1>{{issue_title}}</h1>
+				<p class="issue-description">{{issue_description}}</p>
+
+				<p class="upvote-value">
+					<img id="upvote_image" src="images/vote.jpg" alt="vote button">
+					Upvotes: {{issue_upvotes}}
+				</p>
+			</article>
+				
+			<section id="add-comment">
+				<form class="comment-form" action="/viewDetail" method="post">
+					<textarea name="comment_text" placeholder="comment here"></textarea>
+					<input class="comment-submit" type="submit" value="Add Comment">
+					<input class="issue_id" name="issue_id" type="hidden" value={{issue_id}}>
+				</form>
+			</section>
+				
+
+			<h3>Most recent comments on this issue</h3>
+			{{#each comments}}
+			<article class="comments">
+				{{{this}}}
+			</article>
+			{{/each}}
 
 		</section>
 

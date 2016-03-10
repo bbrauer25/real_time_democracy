@@ -43,7 +43,7 @@ app.get('/', function (req, res, next) {
         for (var i = 0; i < rows.length; i++) {
           //issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
           var myArticle = "<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p>";
-          myArticle += "<form action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\">";
+          myArticle += "<form class=\"view-issue\" action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\" class=\"view-issue-button\">";
           myArticle += "<input class=\"issue\" name=\"issue_id\" type=\"hidden\" value=" + rows[i].id + "></form></article>";
           issueArray.push(myArticle);
         };
@@ -177,7 +177,7 @@ app.post('/login', function (req, res, next) {
                 };
                 for (var i = 0; i < rows.length; i++) {
                   var myArticle = "<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p>";
-                  myArticle += "<form action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\">";
+                  myArticle += "<form class=\"view-issue\" action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\" class=\"view-issue-button\">";
                   myArticle += "<input class=\"issue\" name=\"issue_id\" type=\"hidden\" value=" + rows[i].id + "></form></article>";
                   //issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
                   issueArray.push(myArticle);
