@@ -188,7 +188,7 @@ app.post('/login', function (req, res, next) {
               }
             } else {
                 var data = {username: req.session.username};
-                res.render('signup_complete', data)
+                res.render('home_page', data)
             }
           });
         }
