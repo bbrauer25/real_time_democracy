@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title>Real Time Democracy</title>
+	<meta name="description" content="Real Time Demcracy">
+	<meta name="author" content="CS361 ">
+
+	<link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="viewDetail.js"></script>
+
+
+	<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+
+	<![endif]-->
+</head>
+
+<body>
+	<section id="main">
+
+		<header id="header">
+			<a href="home.html">Real Time Democracy</a>
+			<form action="/logout" method="post">
+				<input id="form-submit" type="submit" value="Logout">
+			</form>
+		
+		</header>
+
+		<section>
+
+			<article class="issue-info">
+				<h1>{{issue_title}}</h1>
+				<p class="issue-description">{{issue_description}}</p>
+
+				<p class="upvote-value">
+					<img id="upvote_image" src="images/vote.jpg" alt="vote button">
+					Upvotes: {{issue_upvotes}}
+				</p>
+			</article>
+				
+			<section id="add-comment">
+				<form class="comment-form" action="/viewDetail" method="post">
+					<textarea name="comment_text" placeholder="comment here"></textarea>
+					<input class="comment-submit" type="submit" value="Add Comment">
+					<input class="issue_id" name="issue_id" type="hidden" value={{issue_id}}>
+				</form>
+			</section>
+				
+
+			<h3>Most recent comments on this issue</h3>
+			{{#each comments}}
+			<article class="comments">
+				{{{this}}}
+			</article>
+			{{/each}}
+
+		</section>
+
+		<footer id="footer">
+			Real Time Democracy ® 2016
+		</footer>
+	</section>
+</body>
+</html>
+

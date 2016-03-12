@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Testing Access to Signup Page"
+curl --request GET 107.170.198.194:3002/sign-up
+
+echo "Testing Signup"
+curl -d f_name="Seymour" -d l_name="Butz" -d email="seymour@asdf.com" -d zip="11104" -d role_type_id="1" 107.170.198.194:3002/sign-up
+
+echo "Testing with wget"
+wget --post-data 'f_name=IP&l_name=Freely&email=ip@asdf.com&zip=11104&role_type_id=1' 107.170.198.194:3002/sign-up

@@ -29,33 +29,10 @@
 		<section>
 
 			<h1>Welcome, {{username}}!</h1>
-
-			<!-- Loop will go here, for the time being I'm just going to render the same thing 3 times -->
-      
-      {{#each issue}}
-        {{{this}}}
-      {{/each}}
-
-			<article class="issue">
-				<h3>{{issue_title}}</h3>
-				<p>
-					{{issue_description}}
-				</p>
-			</article>
-
-			<article class="issue">
-				<h3>{{issue_title}}</h3>
-				<p>
-					{{issue_description}}
-				</p>
-			</article>
-
-			<article class="issue">
-				<h3>{{issue_title}}</h3>
-				<p>
-					{{issue_description}}
-				</p>
-			</article>
+		
+			{{#each issue}}
+				{{{this}}}
+			{{/each}}
 
 		</section>
 
@@ -65,3 +42,4 @@
 	</section>
 </body>
 </html>
+
