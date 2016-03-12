@@ -1,19 +1,32 @@
 #!/bin/bash
 
 echo "Testing Access to Main Page"
-curl --request GET 107.170.198.194:3000/
+curl --request GET 107.170.198.194:3001/
 
 echo "Testing Login with Bad Credentials"
-curl --data "username=jane.doe@123.com&password=bad" 107.170.198.194:3000/login -c cookies.txt
+curl --data "username=jane.doe@123.com&password=bad" 107.170.198.194:3001/login -c cookies.txt
 
 echo "Testing Login with Good Credentials"
-curl --data "username=jane.doe@123.com&password=password" 107.170.198.194:3000/login -c cookies.txt
+curl --data "username=jane.doe@123.com&password=password" 107.170.198.194:3001/login -c cookies.txt
 
 echo "Testing base URL with user Logged In - redirect to logged in home page"
-curl --request GET 107.170.198.194:3000/ -b cookies.txt
+curl --request GET 107.170.198.194:3001/ -b cookies.txt
 
 echo "Testing log out"
-curl --request POST 107.170.198.194:3000/logout
+curl --request POST 107.170.198.194:3001/logout
 
 echo "Testing that session reset and user logged out - access main page"
-curl --request GET 107.170.198.194:3000/ -b cookies.txt
+curl --request GET 107.170.198.194:3001/ -b cookies.txt
+
+echo "Logging back in"
+curl --data "username=jane.doe@123.com&password=password" 107.170.198.193:3001/login -c cookies.txt
+
+echo "Viewing Issue Detail"
+curl --data "issue_id=1" 107.170.198.194:3001/viewDetail -b cookies.txt
+
+echo "Adding an upvote"
+curl --data "issue_id=1" 107.170.198.194:3001/sendUpvote -b cookies.txt
+
+echo "Adding a comment and reloading page"
+curl --date "issue_id=1&comment_text=Adding a test comment" 107.170.198.194:3001/viewDetail -b cookies.txt
+
