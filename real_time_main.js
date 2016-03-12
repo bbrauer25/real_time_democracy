@@ -41,7 +41,6 @@ app.get('/', function (req, res, next) {
           issue_id: rows[0].id
         };
         for (var i = 0; i < rows.length; i++) {
-          //issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
           var myArticle = "<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p>";
           myArticle += "<form class=\"view-issue\" action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\" class=\"view-issue-button\">";
           myArticle += "<input class=\"issue\" name=\"issue_id\" type=\"hidden\" value=" + rows[i].id + "></form></article>";
@@ -164,6 +163,7 @@ app.post('/login', function (req, res, next) {
               next(err);
               return;
             }
+              
             if (rows.length > 0) {
               console.log(rows[0]);
               var issueArray = [];
@@ -179,7 +179,6 @@ app.post('/login', function (req, res, next) {
                   var myArticle = "<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p>";
                   myArticle += "<form class=\"view-issue\" action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\" class=\"view-issue-button\">";
                   myArticle += "<input class=\"issue\" name=\"issue_id\" type=\"hidden\" value=" + rows[i].id + "></form></article>";
-                  //issueArray.push("<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p></article>");
                   issueArray.push(myArticle);
                 };
                 data.issue = issueArray;
@@ -194,6 +193,50 @@ app.post('/login', function (req, res, next) {
       });
     }
   });
+});
+
+// basic signup page when the user hits the submit button, POST is sent
+app.get('/sign-up', function (req, res, next) {
+    res.render('sign_up');
+    //res.sendFile('static/signup.html', { root : __dirname});   
+});
+
+// POST request is sent to DB, the user info is entered
+app.post('/sign-up', function (req, res, next) {
+    // this is printing to the console with correct information
+    console.log(req.body.fname);
+    console.log(req.body.user);
+
+    // conditional, to check what user_type has been selected from dropdown menu
+    if (req.body.user === "constituent") {
+        var signupQuery = "INSERT INTO RTD_user (f_name, l_name, email, zip, role_type_id) VALUES ('" + req.body.fname + "','" + req.body.lname + "', '" + req.body.email + "', '" + req.body.zip + "', (SELECT id FROM RTD_role_type WHERE role_name = '" + "constituent" + "'))";
+        console.log(signupQuery);
+        mysql.pool.query(signupQuery, function (err, rows) {
+            if (err) {
+                next(err);
+                return;
+            }
+            if (rows < 1) {
+                req.session.reset();
+                res.send('Sorry, sign up failed');
+            }
+        });
+    }
+
+    // conditional, to check what user_type has been selected from dropdown menu
+    if (req.body.user === "official") {
+        var signupQuery = "INSERT INTO RTD_user (f_name, l_name, email, zip, role_type_id) VALUES ('" + req.body.fname + "','" + req.body.lname + "', '" + req.body.email + "', '" + req.body.zip + "', (SELECT id FROM RTD_role_type WHERE role_name = '" + "elected" + "'))";
+        mysql.pool.query(signupQuery, function (err, rows) {
+            if (err) return;
+
+            if (rows < 1) {
+                req.session.reset();
+                res.send('Sorry, sign up failed');
+            }
+        });
+    }
+
+    res.render('home_page');
 });
 
 app.use(function (req, res) {
@@ -211,4 +254,5 @@ app.use(function (err, req, res, next) {
 app.listen(app.get('port'), function () {
     console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
+
 

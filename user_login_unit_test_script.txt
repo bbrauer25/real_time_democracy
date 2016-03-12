@@ -4,10 +4,10 @@ echo "Testing Access to Main Page"
 curl --request GET 107.170.198.194:3000/
 
 echo "Testing Login with Bad Credentials"
-curl --data "username=jane.doe@123.com&passwword=bad" 107.170.198.194:3000/login -c cookies.txt
+curl --data "username=jane.doe@123.com&password=bad" 107.170.198.194:3000/login -c cookies.txt
 
 echo "Testing Login with Good Credentials"
-curl --data "username=jane.doe@123.com&passwword=password" 107.170.198.194:3000/login -c cookies.txt
+curl --data "username=jane.doe@123.com&password=password" 107.170.198.194:3000/login -c cookies.txt
 
 echo "Testing base URL with user Logged In - redirect to logged in home page"
 curl --request GET 107.170.198.194:3000/ -b cookies.txt
