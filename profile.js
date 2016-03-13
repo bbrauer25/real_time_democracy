@@ -9,8 +9,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
-//app.set('views', __dirname + '/views');
-//app.set('view engine', 'jade');
+
 app.set('port', 3000);
 app.use(express.static('static')); //static pages for testing
  app.use(sessions({
@@ -23,8 +22,7 @@ app.use(express.static('static')); //static pages for testing
 // this is just a basic set up of the profile page, no data from the DB is connected
 // I am not sure where the bio, user since, etc data is in the DB
 app.get('/profile', function (req, res, next) {
-    res.render('profile');
-    //res.sendFile('static/profile.html', { root : __dirname});   
+    res.render('profile'); 
 }); 
 
 app.use(function (req, res) {
