@@ -208,36 +208,54 @@ app.post('/sign-up', function (req, res, next) {
     console.log(req.body.fname);
     console.log(req.body.user);
 
-    // conditional, to check what user_type has been selected from dropdown menu
-    if (req.body.user === "constituent") {
-        var signupQuery = "INSERT INTO RTD_user (f_name, l_name, email, zip, role_type_id) VALUES ('" + req.body.fname + "','" + req.body.lname + "', '" + req.body.email + "', '" + req.body.zip + "', (SELECT id FROM RTD_role_type WHERE role_name = '" + "constituent" + "'))";
-        console.log(signupQuery);
-        mysql.pool.query(signupQuery, function (err, rows) {
-            if (err) {
-                next(err);
-                return;
-            }
-            if (rows < 1) {
-                req.session.reset();
-                res.send('Sorry, sign up failed');
-            }
-        });
-    }
-
-    // conditional, to check what user_type has been selected from dropdown menu
     if (req.body.user === "official") {
-        var signupQuery = "INSERT INTO RTD_user (f_name, l_name, email, zip, role_type_id) VALUES ('" + req.body.fname + "','" + req.body.lname + "', '" + req.body.email + "', '" + req.body.zip + "', (SELECT id FROM RTD_role_type WHERE role_name = '" + "elected" + "'))";
-        mysql.pool.query(signupQuery, function (err, rows) {
-            if (err) return;
-
-            if (rows < 1) {
-                req.session.reset();
-                res.send('Sorry, sign up failed');
-            }
-        });
+      var queryType = "elected"
+    }
+    else{
+      var queryType = req.body.user
     }
 
-    res.render('home_page');
+    // The query is the same for constituents or elected officials, only the queryType changes
+    var signupQuery = "INSERT INTO RTD_user (f_name, l_name, email, zip, role_type_id) VALUES ('" + req.body.fname + "','" + req.body.lname + "', '" + req.body.email + "', '" + req.body.zip + "', (SELECT id FROM RTD_role_type WHERE role_name = '" + queryType + "'))";
+    console.log(signupQuery);
+    mysql.pool.query(signupQuery, function (err, rows) {
+      if (err) {
+        next(err);
+        return;
+      }
+      if (rows < 1) {
+        req.session.reset();
+        res.send('Sorry, sign up failed');
+      }
+
+      // Render issues
+      var issueQuery = "SELECT title, id, issue FROM RTD_issue;";
+      mysql.pool.query(issueQuery, function (err, rows) {
+        if (err) {
+          next(err);
+          return;
+        }
+        var issueArray = [];
+        if (rows.length > 0) {
+          console.log(rows[0]);
+          var data = {
+            username: req.body.email,
+            issue_description: rows[0].issue,
+            issue_title: rows[0].title,
+            issue_id: rows[0].id
+          };
+          for (var i = 0; i < rows.length; i++) {
+            var myArticle = "<article class=\"issue\"><h3>" + rows[i].title + "</h3><p>" + rows[i].issue + "</p>";
+            myArticle += "<form class=\"view-issue\" action=\"/viewDetail\" method=\"post\"><input type=\"submit\" value=\"View Issue Detail\" class=\"view-issue-button\">";
+            myArticle += "<input class=\"issue\" name=\"issue_id\" type=\"hidden\" value=" + rows[i].id + "></form></article>";
+            issueArray.push(myArticle);
+          };
+          data.issue = issueArray;
+          res.render('home_page', data);
+        }
+      });
+    });
+
 });
 
 app.use(function (req, res) {
