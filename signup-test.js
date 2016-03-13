@@ -9,8 +9,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
-//app.set('views', __dirname + '/views');
-//app.set('view engine', 'jade');
+
 app.set('port', 3001);
 app.use(express.static('static')); //static pages for testing
  app.use(sessions({
