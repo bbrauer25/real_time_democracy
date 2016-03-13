@@ -9,8 +9,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.engine('handlebars', handlebars({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
-//app.set('views', __dirname + '/views');
-//app.set('view engine', 'jade');
+
 app.set('port', 3001);
 app.use(express.static('static')); //static pages for testing
 app.use(sessions({
@@ -199,7 +198,6 @@ app.post('/login', function (req, res, next) {
 // basic signup page when the user hits the submit button, POST is sent
 app.get('/sign-up', function (req, res, next) {
     res.render('sign_up');
-    //res.sendFile('static/signup.html', { root : __dirname});   
 });
 
 // POST request is sent to DB, the user info is entered
